@@ -1,0 +1,33 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "fb-counter-app",
+          "appId": "1:232809362090:android:0123aa1631fef9788dd6d3",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "fb-counter-app",
+          "configurations": {
+            "android": "1:232809362090:android:0123aa1631fef9788dd6d3",
+            "ios": "1:232809362090:ios:2d7b46d3c2f2a9078dd6d3",
+            "macos": "1:232809362090:ios:2d7b46d3c2f2a9078dd6d3",
+            "web": "1:232809362090:web:04422973a8fbbe838dd6d3",
+            "windows": "1:232809362090:web:6c4dfd169f51b7488dd6d3"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "public": "build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}

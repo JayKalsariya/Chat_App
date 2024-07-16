@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "232809362090",
+    "project_id": "fb-counter-app",
+    "storage_bucket": "fb-counter-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:232809362090:android:0123aa1631fef9788dd6d3",
+        "android_client_info": {
+          "package_name": "com.example.counter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOmtDnktLnxuwiP9maEoAPQgXxJOIasiI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
