@@ -1,16 +1,19 @@
+import 'package:counter/global.dart';
 import 'package:counter/myroutes/routes.dart';
 import 'package:counter/services/auth_services.dart';
+import 'package:counter/services/firestore_service.dart';
 import 'package:counter/utils/extension.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SigningPage extends StatelessWidget {
   const SigningPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController usernameController = TextEditingController();
-    TextEditingController passwordController = TextEditingController();
+    TextEditingController email = TextEditingController();
+    TextEditingController password = TextEditingController();
 
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -47,17 +50,17 @@ class SigningPage extends StatelessWidget {
                     ),
                   ),
                   40.0.height,
-//Username
+//Email
                   TextFormField(
-                    controller: usernameController,
+                    controller: email,
                     decoration: InputDecoration(
                       labelStyle: TextStyle(
                         color: Colors.blue.shade400,
                       ),
-                      labelText: 'Username',
+                      labelText: 'Email',
                       focusedBorder: OutlineInputBorder(
                         borderRadius: const BorderRadius.all(
-                          Radius.circular(25.0),
+                          Radius.circular(30.0),
                         ),
                         borderSide: BorderSide(
                           color: Colors.blue.shade400,
@@ -73,7 +76,8 @@ class SigningPage extends StatelessWidget {
                   15.0.height,
 //Password
                   TextFormField(
-                    controller: passwordController,
+                    obscureText: true,
+                    controller: password,
                     decoration: InputDecoration(
                       labelText: 'Password',
                       labelStyle: TextStyle(
@@ -114,11 +118,20 @@ class SigningPage extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue.shade400,
                       ),
-                      onPressed: () {
-                        AuthServices.instance.anonymousLogin().then((value) {
+                      onPressed: () async {
+                        User? user = await AuthServices.instance
+                            .signIn(email: email.text, password: password.text);
+                        // AuthServices.instance.anonymousLogin().then((value) {
+                        //   Navigator.pushReplacementNamed(
+                        //       context, MyRoutes.home);
+                        // });
+                        if (user != null) {
+                          await FireStoreService.instance.getUser();
+                          var pref = await SharedPreferences.getInstance();
+                          pref.setBool(Global.isLogin, true);
                           Navigator.pushReplacementNamed(
                               context, MyRoutes.home);
-                        });
+                        }
                       },
                       child: const Text(
                         'Sign In',
@@ -152,30 +165,55 @@ class SigningPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
 //Phone
-
-//Facebook
-                      Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.blue.shade400,
-                              blurRadius: 5,
-                              spreadRadius: 3,
-                              offset: const Offset(0, 0),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, MyRoutes.phone);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.blue.shade400,
+                                blurRadius: 5,
+                                spreadRadius: 3,
+                                offset: const Offset(0, 0),
+                              ),
+                            ],
+                          ),
+                          child: const CircleAvatar(
+                            radius: 25.0,
+                            backgroundColor: Color(0xff1F1B24),
+                            child: Icon(
+                              Icons.phone_android_outlined,
                             ),
-                          ],
-                        ),
-                        child: const CircleAvatar(
-                          radius: 25.0,
-                          backgroundColor: Color(0xff1F1B24),
-                          child: Text(
-                            'f',
-                            style: TextStyle(fontSize: 30),
                           ),
                         ),
                       ),
                       20.0.width,
+//Facebook
+//                       Container(
+//                         decoration: BoxDecoration(
+//                           shape: BoxShape.circle,
+//                           boxShadow: [
+//                             BoxShadow(
+//                               color: Colors.blue.shade400,
+//                               blurRadius: 5,
+//                               spreadRadius: 3,
+//                               offset: const Offset(0, 0),
+//                             ),
+//                           ],
+//                         ),
+//                         child: const CircleAvatar(
+//                           radius: 25.0,
+//                           backgroundColor: Color(0xff1F1B24),
+//                           child: Text(
+//                             'f',
+//                             style: TextStyle(fontSize: 30),
+//                           ),
+//                         ),
+//                       ),
+//                       20.0.width,
 //Google
                       GestureDetector(
                         onTap: () async {
@@ -184,6 +222,8 @@ class SigningPage extends StatelessWidget {
                           User? user = userCredential.user;
 
                           if (user != null) {
+                            await FireStoreService.instance.addUser(user: user);
+                            await FireStoreService.instance.getUser();
                             Navigator.pushReplacementNamed(
                               context,
                               'home',

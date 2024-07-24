@@ -1,5 +1,6 @@
 import 'package:counter/myroutes/routes.dart';
 import 'package:counter/services/auth_services.dart';
+import 'package:counter/services/firestore_service.dart';
 import 'package:counter/utils/extension.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -145,6 +146,8 @@ class SignUpPage extends StatelessWidget {
                           password: pc.text,
                         );
                         if (user != null) {
+                          await FireStoreService.instance.addUser(user: user);
+                          await FireStoreService.instance.getUser();
                           Navigator.pushReplacementNamed(
                               context, MyRoutes.home);
                         }
@@ -167,7 +170,8 @@ class SignUpPage extends StatelessWidget {
                     const Text('Already have an account?'),
                     TextButton(
                       onPressed: () {
-                        Navigator.pushReplacementNamed(context, '/');
+                        Navigator.pushReplacementNamed(
+                            context, MyRoutes.signin);
                       },
                       child: Text(
                         'Sign In',

@@ -30,6 +30,20 @@ class AuthServices {
     User? user;
 
     try {
+      UserCredential userCredential = await auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      user = userCredential.user;
+    } on FirebaseAuthException catch (e) {
+      Logger().e(e.toString());
+    }
+    return user;
+  }
+
+  Future<User?> signIn(
+      {required String email, required String password}) async {
+    User? user;
+
+    try {
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
           email: email, password: password);
       user = userCredential.user;
