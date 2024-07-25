@@ -1,5 +1,11 @@
+import 'package:counter/services/auth_services.dart';
+import 'package:counter/services/auth_services.dart';
 import 'package:counter/utils/extension.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+
+import '../../../services/auth_services.dart';
 
 class PhoneLogin extends StatefulWidget {
   const PhoneLogin({super.key});
@@ -57,7 +63,12 @@ class _PhoneLoginState extends State<PhoneLogin> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue.shade400,
                   ),
-                  onPressed: () async {},
+                  onPressed: () {
+                    AuthServices.instance.phoneAuth(
+                      phoneNumber: '+91 ${phoneNumber.text}',
+                      context: context,
+                    );
+                  },
                   child: const Text(
                     'Get OTP',
                     style: TextStyle(

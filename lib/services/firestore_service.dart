@@ -42,7 +42,11 @@ class FireStoreService {
         .collection(userPath)
         .doc(AuthServices.instance.auth.currentUser?.uid)
         .get();
+
+    Logger().i(snap.data());
     currentUser = UserModel.fromMap(snap.data() as Map);
+
+    Logger().i(currentUser.uid);
   }
 
   //Add Data
@@ -200,5 +204,17 @@ class FireStoreService {
         .collection('Messages')
         .doc(msg.time.millisecondsSinceEpoch.toString())
         .update({'status': "seen"});
+  }
+
+  //Get Chats
+  Stream<QuerySnapshot<Map<String, dynamic>>> getChats(
+      {required UserModel user}) {
+    return fireStore
+        .collection(userPath)
+        .doc(currentUser.uid)
+        .collection('MyFriends')
+        .doc(user.uid)
+        .collection('Messages')
+        .snapshots();
   }
 }

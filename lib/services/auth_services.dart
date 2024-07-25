@@ -1,6 +1,9 @@
 // singleton pattern
+
+import 'package:counter/myroutes/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logger/logger.dart';
 
@@ -71,16 +74,24 @@ class AuthServices {
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
-  // Future<> phoneAuth({required String phoneNumber}) async {
-  //   // Trigger the authentication flow
-  //   final PhoneAuthCredential credential = await auth.verifyPhoneNumber(
-  //     verificationCompleted: (PhoneAuthCredential credentia) {},
-  //     verificationFailed: (FirebaseAuthException e) {},
-  //     codeSent: (String verificationId, int? resendToken) {},
-  //     codeAutoRetrievalTimeout: (String verificationId) {},
-  //     phoneNumber: phoneNumber,
-  //   );
-  // }
+  Future<PhoneAuthCredential?> phoneAuth(
+      {required String phoneNumber, required BuildContext context}) async {
+    PhoneAuthCredential? phoneAuthCredential;
+    // Trigger the authentication flow
+    await auth.verifyPhoneNumber(
+      verificationCompleted: (PhoneAuthCredential credential) {
+        phoneAuthCredential = credential;
+      },
+      verificationFailed: (FirebaseAuthException e) {},
+      codeSent: (String verificationId, int? resendToken) {
+        Navigator.pushNamed(context, MyRoutes.otp, arguments: verificationId);
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
+      phoneNumber: phoneNumber,
+    );
+
+    return phoneAuthCredential;
+  }
 
   Future<void> signOut() async {
     await auth.signOut();

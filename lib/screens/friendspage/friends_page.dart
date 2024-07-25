@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:counter/model/user_model.dart';
 import 'package:counter/services/firestore_service.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 
 class FriendsPage extends StatelessWidget {
   const FriendsPage({super.key});
@@ -10,6 +11,12 @@ class FriendsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         title: const Text('Mitro'),
       ),
       body: Padding(
@@ -28,8 +35,16 @@ class FriendsPage extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return Card(
                         child: ListTile(
-                          title: Text(allUsers[index].displayName),
-                          subtitle: Text(allUsers[index].email),
+                          title: Text(
+                            allUsers[index].displayName,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          subtitle: Text(
+                            allUsers[index].email,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                           trailing: ElevatedButton.icon(
                             icon: const Icon(
                               Icons.person_add_alt_1_rounded,
@@ -38,6 +53,8 @@ class FriendsPage extends StatelessWidget {
                             onPressed: () {
                               FireStoreService.instance
                                   .addFriends(userModel: allUsers[index]);
+                              allUsers.removeAt(index);
+                              Logger().i(allUsers.length);
                             },
                             style: ElevatedButton.styleFrom(
                               // backgroundColor: Colors.grey.shade800,

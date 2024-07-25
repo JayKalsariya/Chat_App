@@ -8,12 +8,24 @@ import 'package:counter/utils/extension.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   FireStoreService.instance.getUser();
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      endDrawerEnableOpenDragGesture: true,
       drawer: Drawer(
         child: Column(
           children: [
@@ -38,7 +50,9 @@ class HomePage extends StatelessWidget {
               leading: const Icon(Icons.group),
               title: const Text('My Friends'),
               trailing: const Icon(Icons.chevron_right),
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, MyRoutes.friends);
+              },
             ),
             ListTile(
               leading: const Icon(Icons.logout),
